@@ -65,10 +65,14 @@ impl EmulatorMemory {
     {
         let t = T::default();
         let size = mem::size_of::<T>();
-        let (bytes, _) = self.read_bytes(address, size);
-        unsafe {}
-
-        todo!()
+        let (bytes, size) = self.read_bytes(address, size);
+        unsafe {
+            // copy to new instance
+            let mut t = t;
+            let t_ptr = &mut t as *mut T as *mut u8;
+            t_ptr.copy_from_nonoverlapping(bytes.as_ptr(), size);
+            t
+        }
     }
 
     /// Fixes the size to read / write to the emulator's N64 RAM for safety
