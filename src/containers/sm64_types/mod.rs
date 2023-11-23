@@ -1,6 +1,6 @@
 //! Contains container types that wraps around stuff in SM64
 
-use std::mem::variant_count;
+use strum::{Display, EnumIter};
 
 use super::{emulator::EmulatorMemory, map_file::MapFile};
 
@@ -14,6 +14,7 @@ mod types;
 /// The name directly corresponds to the name of the type in the map file.
 #[allow(non_camel_case_types)]
 #[repr(usize)]
+#[derive(EnumIter, Display)]
 pub enum BaseType {
     gMarioStates,
 }

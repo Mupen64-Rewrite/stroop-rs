@@ -32,7 +32,7 @@
                   # https://devenv.sh/reference/options/
                   languages.rust = {
                     enable = true;
-                    channel = "nightly";
+                    channel = "stable";
                   };
                 }
               ];
