@@ -24,13 +24,17 @@ impl Mario {
         &self.pos
     }
 
-    fn set_pos(&self, pos: Vec3) {
-        todo!()
+    #[must_use]
+    fn set_pos(&mut self, pos: Vec3) -> PendingWrite<Self> {
+        self.pos = pos;
+        PendingWrite(self)
     }
 }
 
-impl SM64Container for Mario {
-    fn update(&mut self, map_file: &MapFile, emulator: &EmulatorMemory) {
-        *self = emulator.read(map_file.get_offset(BaseType::gMarioStates));
+impl SM64Container for Mario {}
+
+impl ContainerInfo for Mario {
+    fn get_base_type() -> BaseType {
+        BaseType::gMarioStates
     }
 }

@@ -77,10 +77,7 @@ impl EmulatorMemory {
 
     /// Writes bytes from a container type
     #[allow(unsafe_code)]
-    pub fn write<T>(&self, address: usize, t: &T) -> usize
-    where
-        T: SM64Container,
-    {
+    pub fn write<T: SM64Container>(&self, address: usize, t: &T) -> usize {
         let size = mem::size_of::<T>();
         let t_ptr = t as *const T as *const u8;
         let bytes = unsafe { slice::from_raw_parts(t_ptr, size) };
