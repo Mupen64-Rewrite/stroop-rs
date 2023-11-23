@@ -60,24 +60,27 @@ impl EmulatorMemory {
     /// Reads bytes into a container types
     #[allow(unsafe_code)]
     pub fn read<T: Default>(&self, address: usize) -> T {
-        let t = T::default();
+        let mut t = T::default();
+        let t_ptr = &mut t as *mut T as *mut u8;
+
         let size = mem::size_of::<T>();
         let (bytes, size) = self.read_bytes(address, size);
+
         unsafe {
-            // copy to new instance
-            let mut t = t;
-            let t_ptr = &mut t as *mut T as *mut u8;
             t_ptr.copy_from_nonoverlapping(bytes.as_ptr(), size);
-            t
         }
+
+        t
     }
 
     /// Writes bytes from a container type
     #[allow(unsafe_code)]
     pub fn write<T>(&self, address: usize, t: &T) -> usize {
-        let size = mem::size_of::<T>();
         let t_ptr = t as *const T as *const u8;
+
+        let size = mem::size_of::<T>();
         let bytes = unsafe { slice::from_raw_parts(t_ptr, size) };
+
         self.write_bytes(address, bytes)
     }
 
