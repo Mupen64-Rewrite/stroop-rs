@@ -59,10 +59,7 @@ impl EmulatorMemory {
 
     /// Reads bytes into a container types
     #[allow(unsafe_code)]
-    pub fn read<T>(&self, address: usize) -> T
-    where
-        T: SM64Container + Default,
-    {
+    pub fn read<T: Default>(&self, address: usize) -> T {
         let t = T::default();
         let size = mem::size_of::<T>();
         let (bytes, size) = self.read_bytes(address, size);
@@ -77,7 +74,7 @@ impl EmulatorMemory {
 
     /// Writes bytes from a container type
     #[allow(unsafe_code)]
-    pub fn write<T: SM64Container>(&self, address: usize, t: &T) -> usize {
+    pub fn write<T>(&self, address: usize, t: &T) -> usize {
         let size = mem::size_of::<T>();
         let t_ptr = t as *const T as *const u8;
         let bytes = unsafe { slice::from_raw_parts(t_ptr, size) };
