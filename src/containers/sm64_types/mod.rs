@@ -4,7 +4,7 @@ use strum::{Display, EnumIter};
 
 use super::{emulator::EmulatorMemory, map_file::MapFile};
 
-mod types;
+pub mod types;
 
 /// A base type of something in SM64.
 ///
@@ -22,9 +22,15 @@ pub enum BaseType {
 /// Represents the base type of something in SM64.
 pub trait SM64Container: Default + ContainerInfo {
     /// Updates internal state by reading from memory.
-    fn update_read(&mut self, map_file: &MapFile, emulator: &EmulatorMemory) {
+    fn read_from_memory(&mut self, map_file: &MapFile, emulator: &EmulatorMemory) {
         let offset = Self::get_base_type_offset(map_file);
         *self = emulator.read(offset);
+    }
+
+    /// Writes internal state to emulator memory.
+    fn write_to_memory(&self, map_file: &MapFile, emulator: &EmulatorMemory) {
+        let offset = Self::get_base_type_offset(map_file);
+        emulator.write(offset, self);
     }
 }
 
@@ -34,16 +40,5 @@ pub trait ContainerInfo {
     fn get_base_type_offset(map_file: &MapFile) -> usize {
         let base_type = Self::get_base_type();
         map_file.get_offset(base_type)
-    }
-}
-
-/// Represents a pending write to the emulator.
-struct PendingWrite<'a, T: ContainerInfo>(&'a T);
-
-impl<'a, T: SM64Container> PendingWrite<'a, T> {
-    /// Updates emulator memory by writing to it.
-    fn write(&self, map_file: &MapFile, emulator: &mut EmulatorMemory) {
-        let offset = <T as ContainerInfo>::get_base_type_offset(map_file);
-        emulator.write(offset, self.0);
     }
 }
