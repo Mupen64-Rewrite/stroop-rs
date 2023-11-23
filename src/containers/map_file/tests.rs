@@ -1,6 +1,6 @@
 use crate::containers::{map_file::MapFile, sm64_types::BaseType};
 
-const SM64_US_MAP: &str = include_str!("../map_files/sm64.us.map");
+const SM64_US_MAP: &str = include_str!("../../map_files/sm64.us.map");
 
 #[test]
 fn parse_sm64_us_map() {
