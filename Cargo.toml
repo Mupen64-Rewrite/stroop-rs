@@ -8,4 +8,4 @@ edition = "2021"
 [dependencies]
 
 [lints.rust]
-unsafe = "forbid"
+unsafe_code = "deny"
