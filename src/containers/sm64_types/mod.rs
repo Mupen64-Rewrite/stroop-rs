@@ -1,11 +1,22 @@
 //! Contains container types that wraps around stuff in SM64
 
-use super::{
-    emulator::EmulatorMemory,
-    map_file::{BaseType, MapFile},
-};
+use std::mem::variant_count;
+
+use super::{emulator::EmulatorMemory, map_file::MapFile};
 
 mod types;
+
+/// A base type of something in SM64.
+///
+/// This is used to determine the base offset of a type through the map file.
+///
+/// # Naming
+/// The name directly corresponds to the name of the type in the map file.
+#[allow(non_camel_case_types)]
+#[repr(usize)]
+pub enum BaseType {
+    gMarioStates,
+}
 
 /// Represents the base type of something in SM64.
 pub trait SM64Container: Default + ContainerInfo {
