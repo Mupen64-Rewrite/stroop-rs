@@ -26,7 +26,7 @@ impl MapFile {
                 let addr_grab_len = 6;
 
                 if let Some(addr_index_base) = addr_index.checked_sub(addr_grab_len) {
-                    let addr = &input[addr_index_base..=addr_index];
+                    let addr = &input[addr_index_base..addr_index];
                     if let Ok(addr) = usize::from_str_radix(addr, 16) {
                         offsets.push(addr);
                         continue;
