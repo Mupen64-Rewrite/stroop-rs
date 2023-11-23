@@ -1,6 +1,6 @@
 //! Contains code that interacts with emulator memory
 
-use std::mem;
+use std::{mem, slice};
 
 use super::sm64_types::SM64Container;
 
@@ -73,6 +73,18 @@ impl EmulatorMemory {
             t_ptr.copy_from_nonoverlapping(bytes.as_ptr(), size);
             t
         }
+    }
+
+    /// Writes bytes from a container type
+    #[allow(unsafe_code)]
+    pub fn write<T>(&self, address: usize, t: &T) -> usize
+    where
+        T: SM64Container,
+    {
+        let size = mem::size_of::<T>();
+        let t_ptr = t as *const T as *const u8;
+        let bytes = unsafe { slice::from_raw_parts(t_ptr, size) };
+        self.write_bytes(address, bytes)
     }
 
     /// Fixes the size to read / write to the emulator's N64 RAM for safety
