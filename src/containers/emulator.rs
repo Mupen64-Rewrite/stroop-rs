@@ -24,7 +24,7 @@ impl EmulatorMemory {
 
         Self {
             n64_offset,
-            ram_size: ram_size,
+            ram_size,
         }
     }
 
