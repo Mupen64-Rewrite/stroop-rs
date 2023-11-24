@@ -2,8 +2,6 @@
 
 use std::{mem, slice};
 
-use super::sm64_types::SM64Container;
-
 /// Container to read / write from the emulator's N64 RAM
 pub struct EmulatorMemory {
     n64_offset: usize,

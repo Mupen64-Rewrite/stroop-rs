@@ -1,6 +1,6 @@
 //! Contains wrapped types that interacts with memory in SM64
 
-use crate::containers::{map_file::*, types::Padding};
+use crate::containers::types::Padding;
 
 use super::*;
 
