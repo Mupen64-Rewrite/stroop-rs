@@ -8,5 +8,10 @@ edition = "2021"
 [dependencies]
 strum = { version = "0.25.0", features = ["derive"] }
 
+[workspace]
+members = [
+    ".",
+]
+
 [lints.rust]
 unsafe_code = "deny"
