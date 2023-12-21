@@ -1,6 +1,6 @@
-use crate::containers::{map_file::MapFile, sm64_types::BaseType};
+use crate::{containers::sm64_types::BaseType, map_file::MapFile};
 
-const SM64_US_MAP: &str = include_str!("../../map_files/sm64.us.map");
+const SM64_US_MAP: &str = include_str!("../map_files/sm64.us.map");
 const FAKE_MAP: &str = include_str!("tests.rs");
 
 #[test]

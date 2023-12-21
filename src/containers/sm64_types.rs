@@ -2,7 +2,9 @@
 
 use strum::{Display, EnumCount, EnumIter};
 
-use super::{emulator::EmulatorMemory, map_file::MapFile};
+use crate::map_file::MapFile;
+
+use super::emulator::EmulatorMemory;
 
 mod types;
 

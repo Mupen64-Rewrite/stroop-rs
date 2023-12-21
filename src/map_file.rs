@@ -1,8 +1,8 @@
 use strum::{EnumCount, IntoEnumIterator};
 
-use crate::containers::map_file::guess_offsets::GUESS_OFFSETS;
+use crate::containers::{emulator::EmulatorMemory, sm64_types::BaseType};
 
-use super::{emulator::EmulatorMemory, sm64_types::BaseType};
+use self::guess_offsets::GUESS_OFFSETS;
 
 mod guess_offsets;
 #[cfg(test)]
