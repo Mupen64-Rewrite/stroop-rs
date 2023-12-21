@@ -98,4 +98,9 @@ impl EmulatorMemory {
             size
         }
     }
+
+    /// Ram dump of the emulator's N64 RAM
+    pub fn ram_dump(&self) -> &[u8] {
+        self.read_bytes(0, self.ram_size).0
+    }
 }

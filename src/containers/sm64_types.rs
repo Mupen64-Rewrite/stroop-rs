@@ -1,6 +1,6 @@
 //! Contains container types that wraps around stuff in SM64
 
-use strum::{Display, EnumIter};
+use strum::{Display, EnumCount, EnumIter};
 
 use super::{emulator::EmulatorMemory, map_file::MapFile};
 
@@ -14,7 +14,7 @@ mod types;
 /// The name directly corresponds to the name of the type in the map file.
 #[allow(non_camel_case_types)]
 #[repr(usize)]
-#[derive(EnumIter, Display)]
+#[derive(EnumIter, Display, PartialEq, Eq, EnumCount, Clone, Copy)]
 pub enum BaseType {
     gMarioStates,
 }

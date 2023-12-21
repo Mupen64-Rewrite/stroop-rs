@@ -1,7 +1,10 @@
-use strum::IntoEnumIterator;
+use strum::{EnumCount, IntoEnumIterator};
 
-use super::sm64_types::BaseType;
+use crate::containers::map_file::guess_offsets::GUESS_OFFSETS;
 
+use super::{emulator::EmulatorMemory, sm64_types::BaseType};
+
+mod guess_offsets;
 #[cfg(test)]
 mod tests;
 
@@ -41,6 +44,30 @@ impl MapFile {
         }
 
         Self(offsets)
+    }
+
+    /// Tries to figure out base type offsets based on the emulator's RAM.
+    pub fn new_guess_offsets(emulator: EmulatorMemory) -> Self {
+        let ram_dump = emulator.ram_dump();
+        let mut map_file = Self(vec![None; BaseType::COUNT]);
+
+        for guess_offset in GUESS_OFFSETS {
+            // if for some reason somebody has duplicate base types, we don't want to overwrite it
+            // TODO check at compile time
+            let base_type_index = guess_offset.base_type as usize;
+            if map_file.0[base_type_index].is_some() {
+                continue;
+            }
+
+            let offset = guess_offset
+                .patterns
+                .iter()
+                .find_map(|pattern| pattern.matches(ram_dump));
+
+            map_file.0[base_type_index] = offset;
+        }
+
+        map_file
     }
 
     /// Gets the offset of a type in the map file.
