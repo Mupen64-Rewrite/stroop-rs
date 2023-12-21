@@ -6,5 +6,5 @@ const SM64_US_MAP: &str = include_str!("../../map_files/sm64.us.map");
 fn parse_sm64_us_map() {
     let map = MapFile::new(SM64_US_MAP);
 
-    assert_eq!(map.get_offset(BaseType::gMarioStates), 0x33b170);
+    assert_eq!(map.get_offset(BaseType::gMarioStates), Some(0x33b170));
 }

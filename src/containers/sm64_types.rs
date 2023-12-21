@@ -23,7 +23,10 @@ pub enum BaseType {
 pub trait SM64Container: Default + ContainerInfo {
     /// Updates internal state by reading from memory.
     fn update_read(&mut self, map_file: &MapFile, emulator: &EmulatorMemory) {
-        let offset = Self::get_base_type_offset(map_file);
+        // only update if we have a valid offset
+        let Some(offset) = Self::get_base_type_offset(map_file) else {
+            return;
+        };
         *self = emulator.read(offset);
     }
 }
@@ -31,7 +34,7 @@ pub trait SM64Container: Default + ContainerInfo {
 pub trait ContainerInfo {
     fn get_base_type() -> BaseType;
 
-    fn get_base_type_offset(map_file: &MapFile) -> usize {
+    fn get_base_type_offset(map_file: &MapFile) -> Option<usize> {
         let base_type = Self::get_base_type();
         map_file.get_offset(base_type)
     }
@@ -43,7 +46,10 @@ struct PendingWrite<'a, T: ContainerInfo>(&'a T);
 impl<'a, T: SM64Container> PendingWrite<'a, T> {
     /// Updates emulator memory by writing to it.
     fn write(&self, map_file: &MapFile, emulator: &mut EmulatorMemory) {
-        let offset = <T as ContainerInfo>::get_base_type_offset(map_file);
+        // only update if we have a valid offset
+        let Some(offset) = <T as ContainerInfo>::get_base_type_offset(map_file) else {
+            return;
+        };
         emulator.write(offset, self.0);
     }
 }

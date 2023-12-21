@@ -6,13 +6,9 @@ use super::sm64_types::BaseType;
 mod tests;
 
 /// Represents a map file holding the offsets of types in SM64.
-pub struct MapFile(Vec<usize>);
+pub struct MapFile(Vec<Option<usize>>);
 
 impl MapFile {
-    pub const fn default() -> Self {
-        Self(Vec::new())
-    }
-
     /// Parses a map file.
     pub fn new(input: &str) -> Self {
         let mut offsets = Vec::new();
@@ -35,20 +31,20 @@ impl MapFile {
                 if let Some(addr_index_base) = addr_index.checked_sub(addr_grab_len) {
                     let addr = &input[addr_index_base..addr_index];
                     if let Ok(addr) = usize::from_str_radix(addr, 16) {
-                        offsets.push(addr);
+                        offsets.push(Some(addr));
                         continue;
                     }
                 }
             }
 
-            offsets.push(0);
+            offsets.push(None);
         }
 
         Self(offsets)
     }
 
     /// Gets the offset of a type in the map file.
-    pub fn get_offset(&self, base_type: BaseType) -> usize {
+    pub fn get_offset(&self, base_type: BaseType) -> Option<usize> {
         self.0[base_type as usize]
     }
 }
