@@ -28,12 +28,16 @@ impl Pattern {
         Self { pattern, offset }
     }
 
+    /// Tries to match the pattern against the data.
+    /// - If the pattern matches, returns `Some(offset)`.
+    /// - If the pattern doesn't match, returns `None`.
+    /// - The offset would be the offset of the first byte of the pattern.
     pub fn matches(&self, mut data: &[u8]) -> Option<usize> {
         // we don't let pattern to be constructed by the user, so head is always Some
         let head = self.pattern[0].unwrap();
         let mut data_offset = 0;
 
-        loop {
+        'data_loop: loop {
             // advance data slice to head
             data = match data.iter().position(|&f| f == head) {
                 Some(index) => {
@@ -49,12 +53,12 @@ impl Pattern {
             }
 
             // check if pattern matches
-            for pattern in self.pattern[1..].iter() {
+            for (i, pattern) in self.pattern[1..].iter().enumerate() {
                 if let Some(pattern) = pattern {
-                    if data[0] != *pattern {
+                    if data[i + 1] != *pattern {
                         data_offset += 1;
                         data = &data[1..];
-                        continue;
+                        continue 'data_loop;
                     }
                 }
             }
