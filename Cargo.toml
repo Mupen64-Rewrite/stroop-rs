@@ -7,10 +7,12 @@ edition = "2021"
 
 [dependencies]
 strum = { version = "0.25.0", features = ["derive"] }
+stroop-macros = { path = "stroop-macros" }
 
 [workspace]
 members = [
     ".",
+    "stroop-macros",
 ]
 
 [lints.rust]

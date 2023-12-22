@@ -4,7 +4,7 @@ use crate::containers::{emulator::EmulatorMemory, sm64_types::BaseType};
 
 use self::guess_offsets::GUESS_OFFSETS;
 
-mod guess_offsets;
+pub mod guess_offsets;
 #[cfg(test)]
 mod tests;
 
