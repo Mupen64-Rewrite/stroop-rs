@@ -24,52 +24,25 @@ pub fn pattern(input: TokenStream) -> TokenStream {
     let mut input = input.into_iter();
 
     // offset
-    const EXPECTED_ISIZE_ERROR: &str = "expected offset as isize";
-
-    let Some(token) = input.next() else {
-        return format!(r#"compile_error!("{EXPECTED_ISIZE_ERROR}")"#)
-            .parse()
-            .unwrap();
-    };
-
-    // get crate
-    // if crate is stroop-rs, then we can use the path directly
-    // otherwise we need to use the crate name
+    // take until comma
     let mut builder = format!("Pattern::new(");
 
-    let token = if let TokenTree::Punct(token) = token {
-        if token.as_char() == '-' {
-            builder.push('-');
-            let Some(token) = input.next() else {
-                return error(token.span(), EXPECTED_ISIZE_ERROR);
-            };
-
-            token
-        } else {
-            return error(token.span(), EXPECTED_ISIZE_ERROR);
+    let mut found_comma = false;
+    while let Some(input) = input.next() {
+        if let TokenTree::Punct(token) = &input {
+            if token.as_char() == ',' {
+                found_comma = true;
+                break;
+            }
         }
-    } else {
-        token
-    };
 
-    let token_string = token.to_string();
-    if token_string.parse::<isize>().is_err() {
-        return error(token.span(), EXPECTED_ISIZE_ERROR);
-    };
+        builder.push_str(&input.to_string());
+    }
 
-    builder.push_str(&token_string);
-
-    // comma
-    const EXPECTED_COMMA_ERROR: &str = "expected comma";
-
-    let Some(TokenTree::Punct(token)) = input.next() else {
-        return format!(r#"compile_error!("{EXPECTED_COMMA_ERROR}")"#)
+    if !found_comma {
+        return format!(r#"compile_error!("expected a comma")"#)
             .parse()
             .unwrap();
-    };
-
-    if token.as_char() != ',' {
-        return error(token.span(), EXPECTED_COMMA_ERROR);
     }
 
     builder.push_str(",&[");
