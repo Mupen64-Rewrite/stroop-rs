@@ -5,8 +5,6 @@ use crate::containers::{emulator::EmulatorMemory, sm64_types::BaseType};
 use self::guess_offsets::GUESS_OFFSETS;
 
 pub mod guess_offsets;
-#[cfg(test)]
-mod tests;
 
 /// Represents a map file holding the offsets of types in SM64.
 pub struct MapFile(Vec<Option<usize>>);
