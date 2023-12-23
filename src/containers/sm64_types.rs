@@ -47,16 +47,30 @@ pub trait ContainerInfo {
 }
 
 /// Represents a pending write to the emulator.
+///
+/// The reason why this exists is because we want to be able to chain writes together, rather than writing everything at once.
 struct PendingWrite<'a, T: ContainerInfo>(&'a T);
 
 impl<'a, T: SM64Container> PendingWrite<'a, T> {
     /// Updates emulator memory by writing to it.
-    fn write<E: Emulator>(&self, map_file: &MapFile, emulator: E) -> Result<(), ContainerIOError> {
+    pub fn write<E: Emulator>(
+        &self,
+        map_file: &MapFile,
+        emulator: E,
+    ) -> Result<(), ContainerIOError> {
         // only update if we have a valid offset
         let offset = <T as ContainerInfo>::get_base_type_offset(map_file)
             .ok_or(ContainerIOError::NoBaseTypeOffset)?;
         emulator.write(offset, self.0)?;
         Ok(())
+    }
+
+    /// Combines two pending writes together.
+    ///
+    /// - Use when the two pending writes are of the same sm64 type.
+    pub fn combine(&self, other: Self) {
+        // same type so self can just write so other is ignored
+        drop(other);
     }
 }
 
