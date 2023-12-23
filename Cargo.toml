@@ -10,15 +10,13 @@ publish = false
 strum = { version = "0.25.0", features = ["derive"] }
 once_cell = "1.19.0"
 
-iced = { version = "0.10.0", features = []}
-iced_aw = { version = "0.7.0", features = ["tabs"]}
-
 stroop-macros = { path = "stroop-macros" }
 
 [workspace]
 members = [
     ".",
     "stroop-macros",
+    "stroop-gui",
 ]
 
 [lints.rust]

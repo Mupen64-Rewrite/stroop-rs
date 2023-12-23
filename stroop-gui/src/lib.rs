@@ -1,4 +1,3 @@
-
 use iced::{
     alignment::{Horizontal, Vertical},
     font,
@@ -7,30 +6,28 @@ use iced::{
 };
 use iced_aw::{TabBarStyles, Tabs};
 
+use tabs::misc_tab::{MiscMessage, MiscTab};
+use tabs::{
+    mario_tab::{MarioMessage, MarioTab},
+    Tab,
+};
+use tabs::{State, TabId};
+
 // TODO  organise this file
 mod tabs;
-mod containers;
-mod map_file;
 
-
-use tabs::mario_tab::{MarioMessage, MarioTab};
-use tabs::misc_tab::{MiscMessage, MiscTab};
-use tabs::{TabId, State};
-
-fn main() -> iced::Result {
-    StroopRS::run(Settings::default())
-}
-enum StroopRS {
-    Loading,
-    Loaded(tabs::State),
-}
 #[derive(Clone, Debug)]
-enum Message {
+pub enum Message {
     TabSelected(TabId),
     Mario(MarioMessage),
     Misc(MiscMessage),
     Loaded(Result<(), String>),
     FontLoaded(Result<(), font::Error>),
+}
+
+pub enum StroopRS {
+    Loading,
+    Loaded(tabs::State),
 }
 
 async fn load() -> Result<(), String> {
@@ -46,14 +43,12 @@ impl Application for StroopRS {
     fn new(_flags: ()) -> (StroopRS, Command<Message>) {
         (
             StroopRS::Loading,
-            Command::batch(vec![
-                Command::perform(load(), Message::Loaded),
-            ]),
+            Command::batch(vec![Command::perform(load(), Message::Loaded)]),
         )
     }
 
     fn title(&self) -> String {
-        String::from(format!("stroop-rs")/*add in version*/)
+        String::from(format!("stroop-rs") /*add in version*/)
     }
 
     fn update(&mut self, message: Self::Message) -> Command<Message> {
@@ -85,31 +80,27 @@ impl Application for StroopRS {
                     .horizontal_alignment(Horizontal::Center)
                     .size(50),
             )
-                .width(Length::Fill)
-                .height(Length::Fill)
-                .center_y()
-                .center_x()
+            .width(Length::Fill)
+            .height(Length::Fill)
+            .center_y()
+            .center_x()
+            .into(),
+            StroopRS::Loaded(state) => Tabs::new(Message::TabSelected)
+                .push(
+                    TabId::MarioTab,
+                    state.mario_tab.tab_label(),
+                    state.mario_tab.view(),
+                )
+                .push(
+                    TabId::MiscTab,
+                    state.misc_tab.tab_label(),
+                    state.misc_tab.view(),
+                )
+                .set_active_tab(&state.active_tab)
+                .tab_bar_style(TabBarStyles::Default)
+                .icon_font(Font::with_name("icons"))
+                .tab_bar_position(iced_aw::TabBarPosition::Top)
                 .into(),
-            StroopRS::Loaded(state) => {
-
-                Tabs::new(Message::TabSelected)
-                    .push(
-                        TabId::MarioTab,
-                        state.mario_tab.tab_label(),
-                        state.mario_tab.view(),
-                    )
-                    .push(
-                        TabId::MiscTab,
-                        state.misc_tab.tab_label(),
-                        state.misc_tab.view(),
-                    )
-                    .set_active_tab(&state.active_tab)
-                    .tab_bar_style(TabBarStyles::Default)
-                    .icon_font(Font::with_name("icons"))
-                    .tab_bar_position(iced_aw::TabBarPosition::Top)
-                    .into()
-            }
         }
     }
 }
-

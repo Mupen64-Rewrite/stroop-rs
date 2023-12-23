@@ -2146,6 +2146,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6637bab7722d379c8b41ba849228d680cc12d0a45ba1fa2b48f2a30577a06731"
 
 [[package]]
+name = "stroop-gui"
+version = "0.1.0"
+dependencies = [
+ "iced",
+ "iced_aw",
+ "stroop-rs",
+]
+
+[[package]]
 name = "stroop-macros"
 version = "0.1.0"
 dependencies = [
@@ -2157,8 +2166,6 @@ dependencies = [
 name = "stroop-rs"
 version = "0.1.0"
 dependencies = [
- "iced",
- "iced_aw",
  "once_cell",
  "stroop-macros",
  "strum",

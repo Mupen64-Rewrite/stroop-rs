@@ -4,7 +4,9 @@ use iced::{
 };
 use iced_aw::tab_bar::TabLabel;
 
-use crate::{Message, Tab};
+use crate::Message;
+
+use super::Tab;
 
 #[derive(Debug, Clone)]
 pub enum MiscMessage {
@@ -18,7 +20,9 @@ pub struct MiscTab {
 }
 
 impl MiscTab {
-    pub fn new() -> Self { MiscTab { misc_data: 0 } }
+    pub fn new() -> Self {
+        MiscTab { misc_data: 0 }
+    }
     pub fn update(&mut self, message: MiscMessage) {}
 }
 
@@ -34,11 +38,8 @@ impl Tab for MiscTab {
     }
 
     fn content(&self) -> Element<'_, Self::Message> {
-        let content: Element<'_, MiscMessage> = Container::new(
-            Column::new()
-                .push(Text::new("miscData")
-                )
-        ).into();
+        let content: Element<'_, MiscMessage> =
+            Container::new(Column::new().push(Text::new("miscData"))).into();
 
         content.map(Message::Misc)
     }
