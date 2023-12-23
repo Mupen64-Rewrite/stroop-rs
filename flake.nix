@@ -34,6 +34,11 @@
                     enable = true;
                     channel = "stable";
                   };
+
+                  packages = with pkgs; [
+                    wayland
+                    libGL
+                  ];
                 }
               ];
             };
