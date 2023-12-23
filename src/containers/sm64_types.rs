@@ -1,10 +1,10 @@
 //! Contains container types that wraps around stuff in SM64
 
+use stroop_emu_mem::Emulator;
 use strum::{Display, EnumCount, EnumIter};
+use thiserror::Error;
 
 use crate::map_file::MapFile;
-
-use super::emulator::EmulatorMemory;
 
 mod types;
 
@@ -24,12 +24,16 @@ pub enum BaseType {
 /// Represents the base type of something in SM64.
 pub trait SM64Container: Default + ContainerInfo {
     /// Updates internal state by reading from memory.
-    fn update_read(&mut self, map_file: &MapFile, emulator: &EmulatorMemory) {
+    fn update_read<E: Emulator>(
+        &mut self,
+        map_file: &MapFile,
+        emulator: E,
+    ) -> Result<(), ContainerIOError> {
         // only update if we have a valid offset
-        let Some(offset) = Self::get_base_type_offset(map_file) else {
-            return;
-        };
-        *self = emulator.read(offset);
+        let offset =
+            Self::get_base_type_offset(map_file).ok_or(ContainerIOError::NoBaseTypeOffset)?;
+        *self = emulator.read(offset)?;
+        Ok(())
     }
 }
 
@@ -47,11 +51,19 @@ struct PendingWrite<'a, T: ContainerInfo>(&'a T);
 
 impl<'a, T: SM64Container> PendingWrite<'a, T> {
     /// Updates emulator memory by writing to it.
-    fn write(&self, map_file: &MapFile, emulator: &mut EmulatorMemory) {
+    fn write<E: Emulator>(&self, map_file: &MapFile, emulator: E) -> Result<(), ContainerIOError> {
         // only update if we have a valid offset
-        let Some(offset) = <T as ContainerInfo>::get_base_type_offset(map_file) else {
-            return;
-        };
-        emulator.write(offset, self.0);
+        let offset = <T as ContainerInfo>::get_base_type_offset(map_file)
+            .ok_or(ContainerIOError::NoBaseTypeOffset)?;
+        emulator.write(offset, self.0)?;
+        Ok(())
     }
+}
+
+#[derive(Debug, Error)]
+pub enum ContainerIOError {
+    #[error("failed to write to emulator")]
+    EmulatorWriteFail(#[from] Box<dyn std::error::Error>),
+    #[error("failed to get offset for base type")]
+    NoBaseTypeOffset,
 }

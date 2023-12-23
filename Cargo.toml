@@ -6,17 +6,17 @@ publish = false
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-
-strum = { version = "0.25.0", features = ["derive"] }
-once_cell = "1.19.0"
-
 stroop-macros = { path = "stroop-macros" }
+stroop-emu-mem = { path = "stroop-emu-mem" }
+strum = { version = "0.25.0", features = ["derive"] }
+thiserror = "1.0.51"
 
 [workspace]
 members = [
     ".",
     "stroop-macros",
     "stroop-gui",
+    "stroop-emu-mem",
 ]
 
 [lints.rust]

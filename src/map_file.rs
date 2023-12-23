@@ -1,6 +1,9 @@
+use std::error::Error;
+
+use stroop_emu_mem::Emulator;
 use strum::{EnumCount, IntoEnumIterator};
 
-use crate::containers::{emulator::EmulatorMemory, sm64_types::BaseType};
+use crate::containers::sm64_types::BaseType;
 
 use self::guess_offsets::GUESS_OFFSETS;
 
@@ -45,9 +48,9 @@ impl MapFile {
     }
 
     /// Tries to figure out base type offsets based on the emulator's RAM.
-    pub fn new_guess_offsets(emulator: EmulatorMemory) -> Self {
-        let ram_dump = emulator.ram_dump();
+    pub fn new_guess_offsets<E: Emulator>(emulator: E) -> Result<Self, Box<dyn Error>> {
         let mut map_file = Self(vec![None; BaseType::COUNT]);
+        let ram_dump = emulator.ram_dump()?;
 
         for guess_offset in GUESS_OFFSETS {
             // if for some reason somebody has duplicate base types, we don't want to overwrite it
@@ -60,12 +63,12 @@ impl MapFile {
             let offset = guess_offset
                 .patterns
                 .iter()
-                .find_map(|pattern| pattern.matches(ram_dump));
+                .find_map(|pattern| pattern.matches(&ram_dump));
 
             map_file.0[base_type_index] = offset;
         }
 
-        map_file
+        Ok(map_file)
     }
 
     /// Gets the offset of a type in the map file.
