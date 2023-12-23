@@ -14,18 +14,18 @@ pub struct Vec3 {
 
 #[repr(C)]
 #[derive(Default, Clone, Copy)]
-struct Mario {
+pub struct Mario {
     _pad0: Padding<0x3C>,
     pos: Vec3,
 }
 
 impl Mario {
-    fn get_pos(&self) -> &Vec3 {
+    pub fn get_pos(&self) -> &Vec3 {
         &self.pos
     }
 
     #[must_use]
-    fn set_pos(&mut self, pos: Vec3) -> PendingWrite<Self> {
+    pub fn set_pos(&mut self, pos: Vec3) -> PendingWrite<Self> {
         self.pos = pos;
         PendingWrite(self)
     }

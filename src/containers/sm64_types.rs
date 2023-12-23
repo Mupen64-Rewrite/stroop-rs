@@ -6,7 +6,7 @@ use thiserror::Error;
 
 use crate::map_file::MapFile;
 
-mod types;
+pub mod types;
 
 /// A base type of something in SM64.
 ///
@@ -49,7 +49,7 @@ pub trait ContainerInfo {
 /// Represents a pending write to the emulator.
 ///
 /// The reason why this exists is because we want to be able to chain writes together, rather than writing everything at once.
-struct PendingWrite<'a, T: ContainerInfo>(&'a T);
+pub struct PendingWrite<'a, T: ContainerInfo>(&'a T);
 
 impl<'a, T: SM64Container> PendingWrite<'a, T> {
     /// Updates emulator memory by writing to it.
