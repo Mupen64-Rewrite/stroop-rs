@@ -68,10 +68,7 @@ impl<'a, T: SM64Container> PendingWrite<'a, T> {
     /// Combines two pending writes together.
     ///
     /// - Use when the two pending writes are of the same sm64 type.
-    pub fn combine(&self, other: Self) {
-        // same type so self can just write so other is ignored
-        drop(other);
-    }
+    pub fn combine(&self, _other: Self) {} // same type so self can just write so other is ignored
 }
 
 #[derive(Debug, Error)]

@@ -25,10 +25,10 @@ pub fn pattern(input: TokenStream) -> TokenStream {
 
     // offset
     // take until comma
-    let mut builder = format!("Pattern::new(");
+    let mut builder = "Pattern::new(".to_string();
 
     let mut found_comma = false;
-    while let Some(input) = input.next() {
+    for input in input.by_ref() {
         if let TokenTree::Punct(token) = &input {
             if token.as_char() == ',' {
                 found_comma = true;
@@ -40,9 +40,7 @@ pub fn pattern(input: TokenStream) -> TokenStream {
     }
 
     if !found_comma {
-        return format!(r#"compile_error!("expected a comma")"#)
-            .parse()
-            .unwrap();
+        return r#"compile_error!("expected a comma")"#.to_string().parse().unwrap();
     }
 
     builder.push_str(",&[");

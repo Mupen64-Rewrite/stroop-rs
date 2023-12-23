@@ -48,7 +48,7 @@ impl Application for StroopRS {
     }
 
     fn title(&self) -> String {
-        String::from(format!("stroop-rs") /*add in version*/)
+        format!("stroop-rs") /*add in version*/
     }
 
     fn update(&mut self, message: Self::Message) -> Command<Message> {

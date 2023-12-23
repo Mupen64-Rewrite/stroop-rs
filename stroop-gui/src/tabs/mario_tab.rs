@@ -3,7 +3,7 @@ use iced::{
     Element,
 };
 use iced_aw::tab_bar::TabLabel;
-use stroop_rs::containers::sm64_types::{self, types::Mario};
+use stroop_rs::containers::sm64_types::types::Mario;
 
 use crate::Message;
 
