@@ -3,7 +3,7 @@ use iced::{
     Element,
 };
 use iced_aw::tab_bar::TabLabel;
-use stroop_rs::containers::sm64_types;
+use stroop_rs::containers::sm64_types::{self, types::Mario};
 
 use crate::Message;
 
@@ -15,7 +15,7 @@ pub enum MarioMessage {
 }
 
 pub struct MarioData {
-    data: sm64_types::BaseType, // data from/for grid !!wTODO
+    data: Mario, // data from/for grid !!wTODO
 }
 pub struct MarioTab {
     pub mario_data: MarioData,
@@ -25,7 +25,7 @@ impl MarioTab {
     pub fn new() -> Self {
         MarioTab {
             mario_data: MarioData {
-                data: sm64_types::BaseType::gMarioStates,
+                data: Default::default(),
             },
         }
     }
