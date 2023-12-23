@@ -5,7 +5,7 @@ use crate::containers::types::Padding;
 use super::*;
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct Vec3 {
     x: f32,
     y: f32,
@@ -13,7 +13,7 @@ pub struct Vec3 {
 }
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 struct Mario {
     _pad0: Padding<0x3C>,
     pos: Vec3,

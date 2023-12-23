@@ -22,7 +22,7 @@ pub enum BaseType {
 }
 
 /// Represents the base type of something in SM64.
-pub trait SM64Container: Default + ContainerInfo {
+pub trait SM64Container: Default + ContainerInfo + Copy {
     /// Updates internal state by reading from memory.
     fn update_read<E: Emulator>(
         &mut self,
