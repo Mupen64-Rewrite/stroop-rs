@@ -13,5 +13,13 @@ once_cell = "1.19.0"
 iced = { version = "0.10.0", features = []}
 iced_aw = { version = "0.7.0", features = ["tabs"]}
 
+stroop-macros = { path = "stroop-macros" }
+
+[workspace]
+members = [
+    ".",
+    "stroop-macros",
+]
+
 [lints.rust]
 unsafe_code = "deny"
