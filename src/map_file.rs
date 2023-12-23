@@ -20,7 +20,7 @@ impl MapFile {
         // grab map file entry assuming format:
         //                 0x000000008033b170                gMarioStates\n
         for base_type in BaseType::iter() {
-            let base_type = format!(" {base_type}\n");
+            let base_type = format!("{base_type}");
 
             if let Some(base_type_index) = input.find(&base_type) {
                 let mut addr_index = base_type_index;
