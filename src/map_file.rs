@@ -20,9 +20,26 @@ impl MapFile {
         // grab map file entry assuming format:
         //                 0x000000008033b170                gMarioStates\n
         for base_type in BaseType::iter() {
-            let base_type = format!("{base_type}");
+            let base_type = format!(" {base_type}");
 
-            if let Some(base_type_index) = input.find(&base_type) {
+            let base_type_index = {
+                let mut input = input;
+
+                let mut index = None;
+                let mut current_index = 0;
+                while let Some(base_type_index) = input.find(&base_type) {
+                    current_index += base_type_index;
+                    // ends with newline or eof
+                    input = &input[base_type_index + base_type.len()..];
+                    if input.starts_with('\n') || input.starts_with("\r\n") || input.is_empty() {
+                        index = Some(current_index);
+                        break;
+                    }
+                }
+                index
+            };
+
+            if let Some(base_type_index) = base_type_index {
                 let mut addr_index = base_type_index;
 
                 // go backwards until not whitespace
