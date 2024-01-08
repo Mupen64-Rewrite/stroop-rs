@@ -1,39 +1,56 @@
 use iced::{
-    widget::{Column, Container, Text},
+    widget::{Text},
+    alignment::{Horizontal, Vertical},
     Element,
 };
 use iced_aw::tab_bar::TabLabel;
+use iced_aw::{grid, grid_row};
+
 use stroop_rs::containers::sm64_types::types::Mario;
 
 use crate::Message;
 
 use super::Tab;
 
+
+
 #[derive(Debug, Clone)]
 pub enum MarioMessage {
-    UpdateData,
+    ReadData,
+    WriteData,
 }
-
-pub struct MarioData {
-    data: Mario, // data from/for grid !!wTODO
+pub struct MarioStruct {
+    mario_data: Mario,
 }
 pub struct MarioTab {
-    pub mario_data: MarioData,
+    horizontal_alignment: Horizontal,
+    vertical_alignment: Vertical,
+    column_spacing: f32,
+    row_spacing: f32,
+    fill_width: bool,
+    fill_height: bool,
+    padding: f32,
 }
 
 impl MarioTab {
     pub fn new() -> Self {
         MarioTab {
-            mario_data: MarioData {
-                data: Default::default(),
-            },
+            horizontal_alignment: (Horizontal::Center),
+            vertical_alignment: (Vertical::Center),
+            column_spacing: 0.0,
+            row_spacing: 0.0,
+            fill_width: false,
+            fill_height: false,
+            padding: 0.0,
         }
     }
     pub fn update(&mut self, message: MarioMessage) {
         match message {
-            MarioMessage::UpdateData => { /*self.mario_data.map()*/ }
+            MarioMessage::ReadData => { /*self.mario_data.read()*/ }
+            MarioMessage::WriteData => { /*self.mario_data.write()*/ }
         }
     }
+
 }
 
 impl Tab for MarioTab {
@@ -48,9 +65,15 @@ impl Tab for MarioTab {
     }
 
     fn content(&self) -> Element<'_, Self::Message> {
-        let content: Element<'_, MarioMessage> =
-            Container::new(Column::new().push(Text::new("marioData"))).into();
+        //MarioTab::view(&mut Self);
 
+        let mut grid = grid!(
+            grid_row!(Text::new("Mario Data1")),
+            grid_row!(Text::new("Mario Data2")),
+            grid_row!(Text::new("Mario Data3")),
+        );
+
+        let mut content: Element<'_, MarioMessage> = Element::from(grid);
         content.map(Message::Mario)
     }
 }

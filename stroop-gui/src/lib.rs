@@ -1,11 +1,11 @@
 use iced::{
-    alignment::{Horizontal, Vertical},
+    alignment::{Horizontal},
     font,
     widget::{container, text},
     Application, Command, Element, Font, Length, Settings, Theme,
 };
 use iced_aw::{TabBarStyles, Tabs};
-
+use iced_aw::{grid, grid_row};
 use tabs::misc_tab::{MiscMessage, MiscTab};
 use tabs::{
     mario_tab::{MarioMessage, MarioTab},
@@ -22,7 +22,7 @@ pub enum Message {
     Mario(MarioMessage),
     Misc(MiscMessage),
     Loaded(Result<(), String>),
-    FontLoaded(Result<(), font::Error>),
+    FontLoaded(Result<(), font::Error>)
 }
 
 pub enum StroopRS {
