@@ -1,48 +1,27 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    systems.url = "github:nix-systems/default";
-    devenv.url = "github:cachix/devenv";
-    fenix.url = "github:nix-community/fenix";
+    flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
-  nixConfig = {
-    extra-trusted-public-keys = "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=";
-    extra-substituters = "https://devenv.cachix.org";
-  };
-
-  outputs = { self, nixpkgs, devenv, systems, ... } @ inputs:
-    let
-      forEachSystem = nixpkgs.lib.genAttrs (import systems);
-    in
+  outputs = { flake-parts, ... } @ inputs:
+    flake-parts.lib.mkFlake { inherit inputs; }
     {
-      packages = forEachSystem (system: {
-        devenv-up = self.devShells.${system}.default.config.procfileScript;
-      });
-      devShells = forEachSystem
-        (system:
-          let
-            pkgs = nixpkgs.legacyPackages.${system};
-          in
-          {
-            default = devenv.lib.mkShell {
-              inherit inputs pkgs;
-              modules = [
-                {
-                  # https://devenv.sh/reference/options/
-                  languages.rust = {
-                    enable = true;
-                    channel = "stable";
-                  };
+      systems = [ "x86_64-linux" "aarch64-linux" "i686-linux" ];
 
-                  packages = with pkgs; [
-                    wayland
-                    libxkbcommon
-                    libGL
-                  ];
-                }
-              ];
-            };
-          });
+      perSystem = { pkgs, ... }: {
+        packages.default = pkgs.callPackage ./package.nix {};
+        devShells.default = pkgs.mkShell {};
+      };
+      # languages.rust = {
+      #   enable = true;
+      #   channel = "stable";
+      # };
+
+      # packages = with pkgs; [
+      #   wayland
+      #   libxkbcommon
+      #   libGL
+      # ];
     };
 }
