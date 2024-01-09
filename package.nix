@@ -6,7 +6,10 @@ rustPlatform.buildRustPackage rec {
   pname = "stroop-gui";
   version = "0.1.0";
   src = ./.;
-  cargoLock.lockFile = ./Cargo.lock;
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    allowBuiltinFetchGit = true;
+  };
   buildAndTestSubdir = "stroop-gui";
 
   buildInputs = libs;
