@@ -4,7 +4,7 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
-  outputs = { self, flake-parts, ... } @ inputs:
+  outputs = { flake-parts, ... } @ inputs:
   let
     libs = pkgs: with pkgs; [
       wayland
