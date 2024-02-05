@@ -1,18 +1,15 @@
 use iced::{
-    widget::{Text},
     alignment::{Horizontal, Vertical},
+    widget::Text,
     Element,
 };
 use iced_aw::tab_bar::TabLabel;
 use iced_aw::{grid, grid_row};
-
-use stroop_rs::containers::sm64_types::types::Mario;
+use stroop_rs::containers::sm64_types::Mario;
 
 use crate::Message;
 
 use super::Tab;
-
-
 
 #[derive(Debug, Clone)]
 pub enum MarioMessage {
@@ -50,7 +47,6 @@ impl MarioTab {
             MarioMessage::WriteData => { /*self.mario_data.write()*/ }
         }
     }
-
 }
 
 impl Tab for MarioTab {

@@ -1,20 +1,8 @@
-//! Contains wrapped types that interacts with memory in SM64
-
 use bitflags::bitflags;
 
 use crate::containers::types::Padding;
 
-use super::*;
-
-#[repr(C)]
-#[derive(Debug, Default, Clone, Copy)]
-pub struct Vec3 {
-    x: f32,
-    y: f32,
-    z: f32,
-}
-
-pub type Angle = u16;
+use super::{general::*, *};
 
 bitflags! {
     #[derive(Debug, Default, Clone, Copy)]

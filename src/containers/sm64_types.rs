@@ -6,7 +6,11 @@ use thiserror::Error;
 
 use crate::map_file::MapFile;
 
-pub mod types;
+pub mod general;
+pub mod specific;
+
+pub use general::*;
+pub use specific::*;
 
 /// A base type of something in SM64.
 ///
