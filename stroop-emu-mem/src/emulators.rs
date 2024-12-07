@@ -1,5 +1,5 @@
 use process_memory::*;
-use sysinfo::System;
+use sysinfo::{ProcessesToUpdate, System};
 
 use crate::{errors::StaticMemoryEmulatorError, Emulator};
 
@@ -22,10 +22,10 @@ impl StaticMemoryEmulator {
         };
 
         let mut system = System::new();
-        system.refresh_processes();
+        system.refresh_processes(ProcessesToUpdate::All, true);
 
         let process = system
-            .processes_by_name(process_name)
+            .processes_by_name(process_name.as_ref())
             .next()
             .ok_or(StaticMemoryEmulatorError::NoProcessFound)?;
 
