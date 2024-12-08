@@ -2062,6 +2062,7 @@ dependencies = [
 name = "stroop-rs"
 version = "0.1.0"
 dependencies = [
+ "bitflags 2.6.0",
  "stroop-emu-mem",
  "stroop-macros",
  "strum",
