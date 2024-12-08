@@ -74,6 +74,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fc7eb209b1518d6bb87b283c20095f5228ecda460da70b44f0802523dea6da04"
 
 [[package]]
+name = "anyhow"
+version = "1.0.94"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c1fd03a028ef38ba2276dce7e33fcd6369c158a1bca17946c4b1b701891c1ff7"
+
+[[package]]
 name = "approx"
 version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2035,6 +2041,7 @@ checksum = "6637bab7722d379c8b41ba849228d680cc12d0a45ba1fa2b48f2a30577a06731"
 name = "stroop-emu-mem"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "process-memory",
  "sysinfo",
  "thiserror 2.0.5",
@@ -2062,6 +2069,7 @@ dependencies = [
 name = "stroop-rs"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "bitflags 2.6.0",
  "stroop-emu-mem",
  "stroop-macros",

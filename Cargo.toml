@@ -11,6 +11,7 @@ stroop-emu-mem = { path = "stroop-emu-mem" }
 strum = { version = "0.26", features = ["derive"] }
 thiserror = "2"
 bitflags = "2.6.0"
+anyhow = "1.0.94"
 
 [workspace]
 members = [

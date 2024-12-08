@@ -2,6 +2,7 @@ use process_memory::*;
 use sysinfo::{ProcessesToUpdate, System};
 
 use crate::{Emulator, errors::StaticMemoryEmulatorError};
+use anyhow::Result;
 
 #[derive(Debug)]
 pub struct StaticMemoryEmulator {
@@ -43,19 +44,19 @@ impl StaticMemoryEmulator {
 }
 
 impl Emulator for StaticMemoryEmulator {
-    fn read<T: Copy>(&self, address: usize) -> Result<T, Box<dyn std::error::Error>> {
+    fn read<T: Copy>(&self, address: usize) -> Result<T> {
         let member = DataMember::new_offset(self.handle, vec![self.n64_offset + address]);
         let value = unsafe { member.read() }?;
         Ok(value)
     }
 
-    fn write<T: Copy>(&self, address: usize, value: &T) -> Result<(), Box<dyn std::error::Error>> {
+    fn write<T: Copy>(&self, address: usize, value: &T) -> Result<()> {
         let member = DataMember::new_offset(self.handle, vec![self.n64_offset + address]);
         member.write(value)?;
         Ok(())
     }
 
-    fn ram_dump(&self) -> Result<Vec<u8>, Box<dyn std::error::Error>> {
+    fn ram_dump(&self) -> Result<Vec<u8>> {
         let ram = copy_address(self.n64_offset, self.ram_size, &self.handle)?;
         Ok(ram)
     }

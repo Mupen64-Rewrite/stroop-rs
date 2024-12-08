@@ -36,7 +36,9 @@ pub trait SM64Container: Default + ContainerInfo + Copy {
         // only update if we have a valid offset
         let offset =
             Self::get_base_type_offset(map_file).ok_or(ContainerIOError::NoBaseTypeOffset)?;
-        *self = emulator.read(offset)?;
+        *self = emulator
+            .read(offset)
+            .map_err(ContainerIOError::EmulatorReadFail)?;
         Ok(())
     }
 }
@@ -65,7 +67,9 @@ impl<T: SM64Container> PendingWrite<'_, T> {
         // only update if we have a valid offset
         let offset = <T as ContainerInfo>::get_base_type_offset(map_file)
             .ok_or(ContainerIOError::NoBaseTypeOffset)?;
-        emulator.write(offset, self.0)?;
+        emulator
+            .write(offset, self.0)
+            .map_err(ContainerIOError::EmulatorWriteFail)?;
         Ok(())
     }
 
@@ -77,8 +81,10 @@ impl<T: SM64Container> PendingWrite<'_, T> {
 
 #[derive(Debug, Error)]
 pub enum ContainerIOError {
-    #[error("failed to write to emulator")]
-    EmulatorWriteFail(#[from] Box<dyn std::error::Error>),
+    #[error("failed to read from emulator memory: {0}")]
+    EmulatorReadFail(anyhow::Error),
+    #[error("failed to write to emulator memory: {0}")]
+    EmulatorWriteFail(anyhow::Error),
     #[error("failed to get offset for base type")]
     NoBaseTypeOffset,
 }
