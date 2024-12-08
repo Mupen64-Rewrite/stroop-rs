@@ -1,26 +1,67 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    fenix = {
+      url = "github:nix-community/fenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixpkgs.url = "github:NixOS/nixpkgs";
     flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
-  outputs = { flake-parts, ... } @ inputs:
-  let
-    libs = pkgs: with pkgs; [
-      wayland
-      libxkbcommon
-    ];
-  in
-    flake-parts.lib.mkFlake { inherit inputs; }
+  outputs =
     {
-      systems = [ "x86_64-linux" "aarch64-linux" "i686-linux" ];
+      flake-parts,
+      nixpkgs,
+      rust-overlay,
+      ...
+    }@inputs:
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [
+        "x86_64-linux"
+      ];
+      perSystem =
+        {
+          inputs',
+          system,
+          pkgs,
+          ...
+        }:
+        let
+          rust-doc = pkgs.writeShellApplication {
+            name = "rust-doc";
+            text = ''
+              xdg-open "${inputs'.fenix.packages.latest.rust-docs}/share/doc/rust/html/index.html"
+            '';
+          };
 
-      perSystem = { pkgs, ... }: with pkgs; {
-        packages.default = callPackage ./package.nix {};
-        devShells.default = mkShell rec {
-          packages = [ rustc cargo clippy rustfmt rust-analyzer ] ++ libs pkgs;
-          LD_LIBRARY_PATH = lib.makeLibraryPath (libs pkgs);
+          rust = pkgs.rust-bin.selectLatestNightlyWith (t: t.default);
+        in
+        {
+          _module.args.pkgs = import nixpkgs {
+            inherit system;
+            overlays = [
+              (import rust-overlay)
+            ];
+          };
+
+          devShells.default = pkgs.mkShell {
+            packages = with pkgs; [
+              (rust.override {
+                extensions = [
+                  "rust-analyzer"
+                  "rust-src"
+                ];
+              })
+              rust-doc
+              wayland
+              libxkbcommon
+            ];
+            # LD_LIBRARY_PATH = lib.makeLibraryPath (libs pkgs);
+          };
         };
-      };
     };
 }
