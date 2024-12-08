@@ -52,10 +52,10 @@ pub trait ContainerInfo {
 
 /// Represents a pending write to the emulator.
 ///
-/// The reason why this exists is because we want to be able to chain writes together, rather than writing everything at once.
+/// The reason why this exists is due to the reason that we want to be able to chain writes together, rather than writing everything at once.
 pub struct PendingWrite<'a, T: ContainerInfo>(&'a T);
 
-impl<'a, T: SM64Container> PendingWrite<'a, T> {
+impl<T: SM64Container> PendingWrite<'_, T> {
     /// Updates emulator memory by writing to it.
     pub fn write<E: Emulator>(
         &self,

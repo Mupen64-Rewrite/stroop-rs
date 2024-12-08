@@ -1,12 +1,12 @@
 [package]
 name = "stroop-gui"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-iced_aw = { git = "https://github.com/iced-rs/iced_aw", features = ["grid", "tabs"]}
-iced = { git = "https://github.com/iced-rs/iced", features = [] }
+iced = { version = "0.13.1", default-features = false, features = ["tiny-skia", "tokio"]}
+iced_aw = { version = "0.11.0", default-features = false, features = ["grid", "tabs"]}
 stroop-rs = { path = ".." }
 

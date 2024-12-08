@@ -1,12 +1,10 @@
+use crate::tab::Message;
+use crate::tab::Tab;
 use iced::{
-    widget::{Column, Container, Text},
     Element,
+    widget::{Column, Container, Text},
 };
 use iced_aw::tab_bar::TabLabel;
-
-use crate::Message;
-
-use super::Tab;
 
 #[derive(Debug, Clone)]
 pub enum MiscMessage {
@@ -15,6 +13,7 @@ pub enum MiscMessage {
 pub struct MiscData {
     // data from/for grid !!TODO
 }
+#[derive(Default)]
 pub struct MiscTab {
     pub misc_data: i32,
 }
