@@ -1,12 +1,10 @@
-use iced::{Element, widget::Text};
-use iced_aw::tab_bar::TabLabel;
-use iced_aw::{grid, grid_row};
-use stroop_rs::containers::sm64_types::SM64Container;
-use stroop_rs::containers::sm64_types::types::{Mario, Vec3};
-use stroop_rs::map_file::MapFile;
 use crate::tab::Message;
 use crate::tab::Tab;
-
+use iced::{widget::Text, Element};
+use iced_aw::tab_bar::TabLabel;
+use iced_aw::{grid, grid_row};
+use stroop_rs::containers::sm64_types::types::Mario;
+use stroop_rs::map_file::MapFile;
 
 #[derive(Debug, Clone)]
 pub enum MarioMessage {
@@ -21,7 +19,6 @@ pub struct MarioTab {
 }
 
 impl MarioTab {
-
     pub fn update(&mut self, message: MarioMessage) {
         match message {
             MarioMessage::ReadData => {

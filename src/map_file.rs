@@ -66,7 +66,7 @@ impl MapFile {
     }
 
     /// Tries to figure out base type offsets based on the emulator's RAM.
-    pub fn new_guess_offsets<E: Emulator>(emulator: E) -> Result<Self, Box<dyn Error>> {
+    pub fn new_guess_offsets(emulator: impl Emulator) -> Result<Self, Box<dyn Error>> {
         let mut map_file = Self(vec![None; BaseType::COUNT]);
         let ram_dump = emulator.ram_dump()?;
 

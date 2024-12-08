@@ -4,10 +4,13 @@ use iced::alignment::{Horizontal, Vertical};
 use iced::widget::{Column, Container, Text};
 use iced::{Element, Length};
 use iced_aw::{TabBarPosition, TabLabel, Tabs};
+use stroop_emu_mem::StaticMemoryEmulator;
 
 const HEADER_SIZE: u16 = 30;
+
 #[derive(Default)]
 pub struct StroopGui {
+    emulator: Option<StaticMemoryEmulator>,
     active_tab: TabId,
     mario_tab: MarioTab,
     misc_tab: MiscTab,
@@ -25,10 +28,17 @@ pub enum Message {
     Mario(MarioMessage),
     Misc(MiscMessage),
     TabClosed(TabId),
+    ConnectEmulator(u32),
+    Initialise,
 }
+
 impl StroopGui {
     pub fn update(&mut self, message: Message) {
         match message {
+            Message::ConnectEmulator(process_id) => {
+                self.emulator =
+                    Some(StaticMemoryEmulator::new(0, false, &process_id.to_string()).unwrap());
+            }
             Message::TabSelected(tab_id) => {
                 self.active_tab = tab_id;
             }
@@ -38,7 +48,8 @@ impl StroopGui {
             Message::Misc(message) => {
                 self.misc_tab.update(message);
             }
-            Message::TabClosed(tab_id) => {}
+            Message::TabClosed(tab_id) => if self.active_tab == tab_id {},
+            _ => {}
         }
     }
 

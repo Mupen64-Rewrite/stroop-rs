@@ -3,6 +3,7 @@ use sysinfo::{ProcessesToUpdate, System};
 
 use crate::{Emulator, errors::StaticMemoryEmulatorError};
 
+#[derive(Debug)]
 pub struct StaticMemoryEmulator {
     n64_offset: usize,
     ram_size: usize,
