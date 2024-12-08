@@ -1,56 +1,37 @@
-use iced::{
-    widget::{Text},
-    alignment::{Horizontal, Vertical},
-    Element,
-};
+use iced::{Element, widget::Text};
 use iced_aw::tab_bar::TabLabel;
 use iced_aw::{grid, grid_row};
-
 use stroop_rs::containers::sm64_types::types::Mario;
 
-use crate::Message;
-
-use super::Tab;
-
-
+use crate::tab::Message;
+use crate::tab::Tab;
 
 #[derive(Debug, Clone)]
 pub enum MarioMessage {
     ReadData,
     WriteData,
 }
-pub struct MarioStruct {
-    mario_data: Mario,
-}
+#[derive(Default)]
 pub struct MarioTab {
-    horizontal_alignment: Horizontal,
-    vertical_alignment: Vertical,
-    column_spacing: f32,
-    row_spacing: f32,
-    fill_width: bool,
-    fill_height: bool,
-    padding: f32,
+    mario_data: Mario,
 }
 
 impl MarioTab {
     pub fn new() -> Self {
         MarioTab {
-            horizontal_alignment: (Horizontal::Center),
-            vertical_alignment: (Vertical::Center),
-            column_spacing: 0.0,
-            row_spacing: 0.0,
-            fill_width: false,
-            fill_height: false,
-            padding: 0.0,
+            mario_data: Mario::default(),
         }
     }
     pub fn update(&mut self, message: MarioMessage) {
         match message {
-            MarioMessage::ReadData => { /*self.mario_data.read()*/ }
-            MarioMessage::WriteData => { /*self.mario_data.write()*/ }
+            MarioMessage::ReadData => {
+                //self.mario_data.update_read();
+            }
+            MarioMessage::WriteData => {
+                //self.mario_data.update_write();
+            }
         }
     }
-
 }
 
 impl Tab for MarioTab {

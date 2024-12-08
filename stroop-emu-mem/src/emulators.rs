@@ -1,7 +1,7 @@
 use process_memory::*;
 use sysinfo::{ProcessesToUpdate, System};
 
-use crate::{errors::StaticMemoryEmulatorError, Emulator};
+use crate::{Emulator, errors::StaticMemoryEmulatorError};
 
 pub struct StaticMemoryEmulator {
     n64_offset: usize,
