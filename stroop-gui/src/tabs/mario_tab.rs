@@ -1,35 +1,39 @@
 use iced::{Element, widget::Text};
 use iced_aw::tab_bar::TabLabel;
 use iced_aw::{grid, grid_row};
-use stroop_rs::containers::sm64_types::types::Mario;
-
+use stroop_rs::containers::sm64_types::SM64Container;
+use stroop_rs::containers::sm64_types::types::{Mario, Vec3};
+use stroop_rs::map_file::MapFile;
 use crate::tab::Message;
 use crate::tab::Tab;
+
 
 #[derive(Debug, Clone)]
 pub enum MarioMessage {
     ReadData,
     WriteData,
+    ReceiveData,
 }
 #[derive(Default)]
 pub struct MarioTab {
+    map_file: MapFile,
     mario_data: Mario,
 }
 
 impl MarioTab {
-    pub fn new() -> Self {
-        MarioTab {
-            mario_data: Mario::default(),
-        }
-    }
+
     pub fn update(&mut self, message: MarioMessage) {
         match message {
             MarioMessage::ReadData => {
-                //self.mario_data.update_read();
+                /* self.mario_data.update_read(
+                    &self.map_file,
+                   &self.emulator? not sure here
+                ).unwrap() */
             }
             MarioMessage::WriteData => {
                 //self.mario_data.update_write();
             }
+            _ => {}
         }
     }
 }
@@ -47,11 +51,11 @@ impl Tab for MarioTab {
 
     fn content(&self) -> Element<'_, Self::Message> {
         //MarioTab::view(&mut Self);
-
+        let data = self.mario_data;
         let mut grid = grid!(
-            grid_row!(Text::new("Mario Data1")),
-            grid_row!(Text::new("Mario Data2")),
-            grid_row!(Text::new("Mario Data3")),
+            grid_row!(Text::new(format!("Mario X: {}", (*data.get_pos()).x))),
+            grid_row!(Text::new(format!("Mario Y: {}", (*data.get_pos()).y))),
+            grid_row!(Text::new(format!("Mario Z: {}", (*data.get_pos()).z))),
         );
 
         let mut content: Element<'_, MarioMessage> = Element::from(grid);
