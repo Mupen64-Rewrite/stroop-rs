@@ -6,5 +6,6 @@ mod tabs;
 fn main() -> iced::Result {
     iced::application("Stroop GUI", StroopGui::update, StroopGui::view)
         .font(iced_fonts::REQUIRED_FONT_BYTES)
-        .run()
+        .theme(StroopGui::theme)
+        .run_with(StroopGui::new)
 }

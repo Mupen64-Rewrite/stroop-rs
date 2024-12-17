@@ -9,5 +9,5 @@ edition = "2024"
 proc-macro = true
 
 [dev-dependencies]
-trybuild = "1.0.101"
+trybuild = "1"
 stroop-rs = { path = ".." }
